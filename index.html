@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>: )</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: white;
+      font-family: 'Space Mono', monospace;
+      color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-size: 2rem;
+      white-space: pre;
+    }
+  </style>
+</head>
+<body>
+  <div id="countdown">Loading...</div>
+
+  <script>
+    function getNextFriday11th(fromDate) {
+      let year = fromDate.getFullYear();
+      let month = fromDate.getMonth();
+
+      while (true) {
+        const testDate = new Date(year, month, 11);
+        if (testDate > fromDate && testDate.getDay() === 5) {
+          return testDate;
+        }
+        month++;
+        if (month > 11) {
+          month = 0;
+          year++;
+        }
+      }
+    }
+
+    const targetDate = getNextFriday11th(new Date());
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = targetDate - now;
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+      const milliseconds = diff % 1000;
+
+      const padded = (n, digits = 2) => n.toString().padStart(digits, '0');
+      const msPadded = milliseconds.toString().padStart(3, '0');
+
+      document.getElementById('countdown').textContent =
+        `${days}d ${padded(hours)}h ${padded(minutes)}m ${padded(seconds)}s ${msPadded}ms`;
+    }
+
+    setInterval(updateCountdown, 10);
+  </script>
+</body>
+</html>
