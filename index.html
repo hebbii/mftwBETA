@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Countdown to Monday 14th</title>
+  <title>: )</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
   <style>
     body {
@@ -35,19 +35,24 @@
       const diff = targetDate - currentDate;
 
       if (diff <= 0) {
-        document.getElementById("countdown").innerHTML = "It's Monday 14th!";
+        document.getElementById("countdown").innerHTML = "website will be updated. please be patient!";
       } else {
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
         const minutes = Math.floor((diff / (1000 * 60)) % 60);
         const seconds = Math.floor((diff / 1000) % 60);
+        const milliseconds = Math.floor(diff % 1000);
 
         document.getElementById("countdown").innerHTML =
-          days + "d " + hours + "h " + minutes + "m " + seconds + "s";
+          days + "d " +
+          hours.toString().padStart(2, '0') + "h " +
+          minutes.toString().padStart(2, '0') + "m " +
+          seconds.toString().padStart(2, '0') + "s " +
+          milliseconds.toString().padStart(3, '0') + "ms";
       }
     }
 
-    setInterval(updateCountdown, 1000);
+    setInterval(updateCountdown, 50); // Update every 50ms for smoother millis
     updateCountdown();
   </script>
 </body>
