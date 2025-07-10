@@ -23,19 +23,24 @@
 
   <script>
     function updateCountdown() {
-      const now = new Date().toLocaleString("en-US", { timeZone: "Europe/Berlin" });
-      const currentDate = new Date(now);
+      // Get current UTC time
+      const now = new Date();
 
-      const year = currentDate.getFullYear();
-      const month = currentDate.getMonth();
-      const targetDate = new Date(Date.UTC(year, month, 14, 0, 0, 0));
+      // Calculate offset to Europe/Berlin
+      const berlinOffset = -now.getTimezoneOffset() + 
+        (new Date().toLocaleString("en-US", { timeZone: "Europe/Berlin", hour12: false }).includes("CEST") ? 120 : 60);
 
-      targetDate.setHours(targetDate.getHours() + 2); // Adjust for CEST (UTC+2)
+      // Create Berlin time
+      const berlinTime = new Date(now.getTime() + berlinOffset * 60000);
 
-      const diff = targetDate - currentDate;
+      const year = berlinTime.getFullYear();
+      const month = berlinTime.getMonth();
+      const targetDate = new Date(year, month, 14, 0, 0, 0, 0);
+
+      const diff = targetDate - berlinTime;
 
       if (diff <= 0) {
-        document.getElementById("countdown").innerHTML = "website will be updated. please be patient!";
+        document.getElementById("countdown").innerHTML = "thank you for your patience. the website will update soon.";
       } else {
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
@@ -50,9 +55,9 @@
           seconds.toString().padStart(2, '0') + "s " +
           milliseconds.toString().padStart(3, '0') + "ms";
       }
+      requestAnimationFrame(updateCountdown);
     }
 
-    setInterval(updateCountdown, 50); // Update every 50ms for smoother millis
     updateCountdown();
   </script>
 </body>
