@@ -1,66 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>: )</title>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet">
+  <title>Countdown to Monday 14th</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
   <style>
     body {
-      background: white;
-      font-family: 'Space Mono', monospace;
-      color: black;
+      background-color: black;
+      color: white;
+      font-family: 'Roboto Mono', monospace;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
       margin: 0;
-      font-size: 2rem;
-      white-space: pre;
+      font-size: 2em;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <div id="countdown">Loading...</div>
+  <div id="countdown"></div>
 
   <script>
-    function getNextMonday14th(fromDate) {
-      let year = fromDate.getFullYear();
-      let month = fromDate.getMonth();
+    function updateCountdown() {
+      const now = new Date().toLocaleString("en-US", { timeZone: "Europe/Berlin" });
+      const currentDate = new Date(now);
 
-      while (true) {
-        const testDate = new Date(year, month, 14);
-        if (testDate > fromDate && testDate.getDay() === 5) {
-          return testDate;
-        }
-        month++;
-        if (month > 11) {
-          month = 0;
-          year++;
-        }
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+      const targetDate = new Date(Date.UTC(year, month, 14, 0, 0, 0));
+
+      targetDate.setHours(targetDate.getHours() + 2); // Adjust for CEST (UTC+2)
+
+      const diff = targetDate - currentDate;
+
+      if (diff <= 0) {
+        document.getElementById("countdown").innerHTML = "It's Monday 14th!";
+      } else {
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+
+        document.getElementById("countdown").innerHTML =
+          days + "d " + hours + "h " + minutes + "m " + seconds + "s";
       }
     }
 
-    const targetDate = getNextMonday14th(new Date());
-
-    function updateCountdown() {
-      const now = new Date();
-      const diff = targetDate - now;
-
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((diff / (1000 * 60)) % 60);
-      const seconds = Math.floor((diff / 1000) % 60);
-      const milliseconds = diff % 1000;
-
-      const padded = (n, digits = 2) => n.toString().padStart(digits, '0');
-      const msPadded = milliseconds.toString().padStart(3, '0');
-
-      document.getElementById('countdown').textContent =
-        `${days}d ${padded(hours)}h ${padded(minutes)}m ${padded(seconds)}s ${msPadded}ms`;
-    }
-
-    setInterval(updateCountdown, 10);
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
   </script>
 </body>
 </html>
